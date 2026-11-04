@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/anime-girl.avif" alt="Anizium CLI için anime tarzı çizim" width="280">
+  <img src="assets/anime-girl.svg" alt="Anizium CLI için anime tarzı çizim" width="280">
 
   # Anizium CLI
 
@@ -60,6 +60,22 @@ python3 anizium.py
 
 Komut bulunamazsa Python 3.10 veya üzeri sürümü kurup Terminal'i yeniden açın.
 
+### iPhone ve iPad (iSH)
+
+[iSH Shell](https://apps.apple.com/app/ish-shell/id1436902243) uygulamasını App Store'dan yükleyip açın. Uygulama içinde aşağıdaki komutu bir kez çalıştırın; gerekli `git` ve `python3` paketlerini kurar, projeyi indirir ve Anizium CLI'yi başlatır:
+
+```sh
+apk update && wget -qO- https://raw.githubusercontent.com/xcodedead/Anizium-CLI/main/ish-install.sh | sh
+```
+
+Sonraki açılışlarda uygulamayı başlatmak için:
+
+```sh
+cd ~/Anizium-CLI && python3 anizium.py
+```
+
+iSH Alpine ortamıdır; depodaki Python sürümü 3.10'dan eskiyse uygulama çalışmaz. Arama, anime bilgileri ve bölüm listeleme gibi terminal özellikleri kullanılabilir. Video izleme için gereken mpv/VLC masaüstü oynatıcıları iOS'ta iSH içinden çalışmaz; video indirme de iSH ve ffmpeg uyumluluğuna bağlıdır.
+
 ### İsteğe bağlı oynatıcı ve indirme araçları
 
 Video izlemek için işletim sisteminde **mpv** veya **VLC** kurulu olmalı ve terminalden çalıştırılabilmelidir. HLS (`.m3u8`) video indirmek için **ffmpeg** gerekir. Bunlar uygulamaya dahil değildir.
@@ -106,10 +122,6 @@ Komutların kısa Türkçe adları da kullanılabilir: `ara`, `bilgi`, `bolumler
 
 ## Tek dosyalı uygulama
 
-## Lisans
-
-Bu proje MIT lisansı altında yayımlanmıştır. Ayrıntılar için [LICENSE](LICENSE) dosyasına bakın.
-
 PyInstaller ile uygulamayı tek dosya halinde oluşturabilirsiniz. Her işletim sistemi için derlemeyi o işletim sisteminde yapın.
 
 **Linux:**
@@ -144,3 +156,7 @@ pyinstaller --clean --noconfirm anizium.spec
 ```
 
 Uygulama `dist/anizium` konumunda oluşturulur. Betik veya uygulama çalışırken Terminal penceresi açık olmalıdır.
+
+## Lisans
+
+Bu proje MIT lisansı altında yayımlanmıştır. Ayrıntılar için [LICENSE](LICENSE) dosyasına bakın.
