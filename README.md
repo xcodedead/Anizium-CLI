@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/anime-girl.avif" alt="Anizium CLI için anime tarzı çizim" width="280">
+  <img src="assets/anime-girl.svg" alt="Anizium CLI için anime tarzı çizim" width="280">
 
   # Anizium CLI
 
@@ -105,6 +105,10 @@ python3 anizium.py watch 'https://anizium.co/watch/12345?season=1&episode=2' --p
 Komutların kısa Türkçe adları da kullanılabilir: `ara`, `bilgi`, `bolumler`, `link`, `izle`.
 
 ## Tek dosyalı uygulama
+
+## Lisans
+
+Bu proje MIT lisansı altında yayımlanmıştır. Ayrıntılar için [LICENSE](LICENSE) dosyasına bakın.
 
 PyInstaller ile uygulamayı tek dosya halinde oluşturabilirsiniz. Her işletim sistemi için derlemeyi o işletim sisteminde yapın.
 
