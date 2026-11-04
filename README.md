@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/anime-girl.svg" alt="Anizium CLI için anime tarzı çizim" width="280">
+  <img src="assets/anime-girl.avif" alt="Anizium CLI için anime tarzı çizim" width="280">
 
   # Anizium CLI
 
