@@ -86,7 +86,7 @@ function searchAnime(query, page) {
     var rows = result.page && result.page.data ? result.page.data : [];
     var items = [];
     for (var i = 0; i < rows.length; i++) if (rows[i]) items.push(card(rows[i]));
-    return JSON.stringify({items: items, hasNextPage: !!(result.page && result.page.next_page)});
+    return items;
 }
 
 function playbackGroups(id) {
@@ -105,7 +105,7 @@ function playbackGroups(id) {
         }
     }
     if (!eps.length) eps.push({id: "1_1", number: 1, title: "Episode 1", url: SITE + "/watch/" + animeId(id) + "?season=1&episode=1"});
-    return JSON.stringify([{id: "main", name: "Episodes", episodes: eps}]);
+    return [{id: "main", name: "Episodes", episodes: eps}];
 }
 
 function playerLinks(id, groupId, episodeId) {
@@ -136,7 +136,7 @@ function playerLinks(id, groupId, episodeId) {
         }
     }
     if (!links.length) throw new Error("No playable streams found");
-    return JSON.stringify(links);
+    return links;
 }
 
 var Provider = {
@@ -154,10 +154,10 @@ var Provider = {
             seen[id] = true;
             items.push(card(item));
         }
-        return JSON.stringify(items);
+        return items;
     },
-    getById: function (id) { return JSON.stringify(titleInfo(id)); },
-    getSettings: function () { return JSON.stringify({filters: [], sortOptions: []}); },
+    getById: function (id) { return titleInfo(id); },
+    getSettings: function () { return {filters: [], sortOptions: []}; },
     getPlaybackGroups: playbackGroups,
     getPlayerLinks: playerLinks
 };
