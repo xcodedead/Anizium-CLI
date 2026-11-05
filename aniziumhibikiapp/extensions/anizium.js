@@ -116,7 +116,9 @@ function titleInfo(id) {
     var episodeCount = 0;
     var seasons = item.seasons || [];
     for (var i = 0; i < seasons.length; i++) episodeCount += (seasons[i].episodes || []).length;
-    info.episodeCount = item.episodeCount || episodeCount || null;
+    // A single aggregate count is misleading when the source has multiple seasons;
+    // the per-season groups below carry the correct counts.
+    info.episodeCount = seasons.length > 1 ? null : (item.episodeCount || episodeCount || null);
     return info;
 }
 
@@ -160,9 +162,9 @@ function playbackGroups(id) {
         for (var e = 0; e < seasonEps.length; e++) {
             var epNo = Number(seasonEps[e].number || (e + 1));
             var epId = seasonNo + "_" + epNo;
-            eps.push({id: epId, number: epNo, title: String(seasonEps[e].name || "Episode " + epNo), url: SITE + "/watch/" + animeId(id) + "?season=" + seasonNo + "&episode=" + epNo});
+            eps.push({id: epId, number: epNo, title: "S" + seasonNo + " · " + String(seasonEps[e].name || "Episode " + epNo), url: SITE + "/watch/" + animeId(id) + "?season=" + seasonNo + "&episode=" + epNo});
         }
-        if (eps.length) playbackGroups.push({id: "season-" + seasonNo, name: "Sezon " + seasonNo, episodes: eps});
+        if (eps.length) playbackGroups.push({id: "season-" + seasonNo, name: "Sezon " + seasonNo + " (" + eps.length + ")", title: "Sezon " + seasonNo, episodes: eps});
     }
     if (!playbackGroups.length) {
         playbackGroups.push({
