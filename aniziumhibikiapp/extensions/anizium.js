@@ -149,22 +149,29 @@ function searchAnime(query, page) {
 }
 
 function playbackGroups(id) {
-    var info = titleInfo(id);
     var result = api("/anime/get?id=" + enc(animeId(id)));
     var seasons = result.data.seasons || [];
-    var eps = [];
+    var playbackGroups = [];
     for (var s = 0; s < seasons.length; s++) {
         var season = seasons[s];
         var seasonNo = Number(season.number || (s + 1));
         var seasonEps = season.episodes || [];
+        var eps = [];
         for (var e = 0; e < seasonEps.length; e++) {
             var epNo = Number(seasonEps[e].number || (e + 1));
             var epId = seasonNo + "_" + epNo;
             eps.push({id: epId, number: epNo, title: String(seasonEps[e].name || "Episode " + epNo), url: SITE + "/watch/" + animeId(id) + "?season=" + seasonNo + "&episode=" + epNo});
         }
+        if (eps.length) playbackGroups.push({id: "season-" + seasonNo, name: "Sezon " + seasonNo, episodes: eps});
     }
-    if (!eps.length) eps.push({id: "1_1", number: 1, title: "Episode 1", url: SITE + "/watch/" + animeId(id) + "?season=1&episode=1"});
-    return [{id: "main", name: "Episodes", episodes: eps}];
+    if (!playbackGroups.length) {
+        playbackGroups.push({
+            id: "season-1",
+            name: "Sezon 1",
+            episodes: [{id: "1_1", number: 1, title: "Episode 1", url: SITE + "/watch/" + animeId(id) + "?season=1&episode=1"}]
+        });
+    }
+    return playbackGroups;
 }
 
 function playerLinks(id, groupId, episodeId) {
