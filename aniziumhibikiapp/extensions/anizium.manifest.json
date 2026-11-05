@@ -1,11 +1,17 @@
 {
   "id": "anizium",
   "name": "Anizium",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Anizium",
   "website": "https://anizium.co",
   "iconUrl": null,
   "lang": "tr",
-  "capabilities": ["LATEST_RELEASES", "PLAYBACK"],
+  "capabilities": [
+    "LATEST_RELEASES",
+    "PLAYBACK"
+  ],
+  "supportedSorts": [],
+  "supportedFilters": [],
+  "fallbackSort": "RELEVANCE",
   "cleartextPlaybackHosts": []
 }
