@@ -51,7 +51,8 @@ function animeId(value) {
 }
 
 function poster(item) {
-    var value = item.posterUrl || item.poster || item.banner || item.cover || item.image || "";
+    var value = item.posterUrl || item.poster || item.Poster || item.banner || item.Banner ||
+        item.cover || item.Cover || item.image || item.Image || item.thumbnail || "";
     value = String(value);
     if (value.indexOf("//") === 0) return "https:" + value;
     if (value && value.charAt(0) === "/") return SITE + value;
@@ -59,12 +60,12 @@ function poster(item) {
 }
 
 function animeTitle(item, fallback) {
-    return String(item.name || item.title || item.russianName || item.englishName ||
-        item.originalName || fallback || "");
+    return String(item.name || item.Name || item.title || item.Title || item.russianName ||
+        item.englishName || item.originalName || item.AnimeName || fallback || "");
 }
 
 function card(item) {
-    var id = String(item.ID || item.id || "");
+    var id = String(item.ID || item.id || item.Id || "");
     var name = animeTitle(item, id);
     var image = poster(item);
     var page = String(item.pageUrl || item.url || (SITE + "/anime/" + id));
@@ -84,7 +85,7 @@ function card(item) {
         posterFallbackUrl: image || null,
         pageUrl: page,
         url: page,
-        description: String(item.description || item.synopsis || item.summary || item.about || item.story || item.overview || ""),
+        description: String(item.description || item.Description || item.synopsis || item.summary || item.about || item.story || item.overview || ""),
         genres: item.genres || [],
         year: item.year || null,
         type: item.type || null,
@@ -97,16 +98,16 @@ function titleInfo(id) {
     if (!result.success || !result.data) throw new Error("Anime not found");
     var item = result.data;
     var info = card({
-        ID: item.ID || item.id || animeId(id),
-        name: item.name || item.title,
+        ID: item.ID || item.id || item.Id || animeId(id),
+        name: item.name || item.Name || item.title || item.Title,
         englishName: item.englishName,
         originalName: item.originalName,
         japaneseName: item.japaneseName,
-        poster: item.poster,
-        posterUrl: item.posterUrl,
-        banner: item.banner,
-        image: item.image,
-        description: item.description || item.synopsis || item.summary || item.about || item.story || item.overview,
+        poster: item.poster || item.Poster,
+        posterUrl: item.posterUrl || item.PosterUrl,
+        banner: item.banner || item.Banner,
+        image: item.image || item.Image,
+        description: item.description || item.Description || item.synopsis || item.summary || item.about || item.story || item.overview,
         genres: item.genres,
         year: item.year,
         type: item.type,
@@ -122,12 +123,28 @@ function titleInfo(id) {
 function searchAnime(query, page) {
     var req = JSON.parse(String(query));
     var q = String(req.query || req.searchQuery || "").trim();
-    var pageNo = Number(req.page || page || 1);
-    var path = q ? "/page/search?value=" + enc(q) + "&page=" + pageNo : "/page/top?platform=favorite&page=" + pageNo;
-    var result = api(path);
-    var rows = result.page && result.page.data ? result.page.data : [];
+    var wanted = Number(req.limit || req.pageSize || 20);
+    if (!wanted || wanted < 1) wanted = 20;
+    if (wanted < 30) wanted = 30;
+    if (wanted > 100) wanted = 100;
     var items = [];
-    for (var i = 0; i < rows.length; i++) if (rows[i]) items.push(card(rows[i]));
+    var seen = {};
+    var pageNo = 1;
+    while (items.length < wanted && pageNo <= 20) {
+        var path = q ? "/page/search?value=" + enc(q) + "&page=" + pageNo : "/page/top?platform=favorite&page=" + pageNo;
+        var result = api(path);
+        var pageData = result.page || {};
+        var rows = pageData.data || [];
+        if (!rows.length) break;
+        for (var i = 0; i < rows.length && items.length < wanted; i++) {
+            if (!rows[i]) continue;
+            var itemId = String(rows[i].ID || rows[i].id || rows[i].Id || "");
+            if (!itemId || seen[itemId]) continue;
+            seen[itemId] = true;
+            items.push(card(rows[i]));
+        }
+        pageNo = pageData.next_page ? Number(pageData.next_page) : pageNo + 1;
+    }
     return items;
 }
 
@@ -185,16 +202,22 @@ var Provider = {
     search: searchAnime,
     latest: function (limit) {
         var count = Number(limit || 20);
-        var result = api("/page/last-added-episodes?page=1");
-        var rows = result.page && result.page.data ? result.page.data : [];
         var items = [];
         var seen = {};
-        for (var i = 0; i < rows.length && items.length < count; i++) {
-            var item = rows[i];
-            var id = String(item.ID || item.id || "");
-            if (!id || seen[id]) continue;
-            seen[id] = true;
-            items.push(card(item));
+        var pageNo = 1;
+        while (items.length < count && pageNo <= 20) {
+            var result = api("/page/last-added-episodes?page=" + pageNo);
+            var pageData = result.page || {};
+            var rows = pageData.data || [];
+            if (!rows.length) break;
+            for (var i = 0; i < rows.length && items.length < count; i++) {
+                var item = rows[i];
+                var id = String(item.ID || item.id || item.Id || "");
+                if (!id || seen[id]) continue;
+                seen[id] = true;
+                items.push(card(item));
+            }
+            pageNo = pageData.next_page ? Number(pageData.next_page) : pageNo + 1;
         }
         return items;
     },
