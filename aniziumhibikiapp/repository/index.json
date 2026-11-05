@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "extensions": [
+    {
+      "id": "anizium",
+      "name": "Anizium",
+      "version": "1.0.0",
+      "author": "Anizium",
+      "website": "https://anizium.co",
+      "iconUrl": null,
+      "lang": "tr",
+      "capabilities": ["LATEST_RELEASES", "PLAYBACK"],
+      "resolverDependencies": [],
+      "isNsfw": false,
+      "type": "source",
+      "manifestUrl": "https://raw.githubusercontent.com/xcodedead/Anizium-CLI/main/aniziumhibikiapp/extensions/anizium.manifest.json"
+    }
+  ]
+}
