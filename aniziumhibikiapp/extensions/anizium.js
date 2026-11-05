@@ -35,7 +35,9 @@ function api(path) {
             "site": "main"
         }
     });
-    var body = response.text();
+    // Hibiki's embedded fetch returns a plain response object with a `body`
+    // string (not the browser Fetch Response API with a text() method).
+    var body = response.body;
     return JSON.parse(String(body));
 }
 
